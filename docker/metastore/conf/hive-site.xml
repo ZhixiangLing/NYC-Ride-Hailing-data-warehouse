@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <!-- 表数据的默认存放目录：和 Spark 的 spark.sql.warehouse.dir 保持一致 -->
+  <property>
+    <name>hive.metastore.warehouse.dir</name>
+    <value>hdfs://hadoop:9000/user/hive/warehouse</value>
+  </property>
+</configuration>

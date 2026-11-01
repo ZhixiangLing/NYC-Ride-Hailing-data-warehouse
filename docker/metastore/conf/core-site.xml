@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <!-- Metastore 也要知道 HDFS 在哪里：建库建表时，它会在 HDFS 上创建对应的目录 -->
+  <property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://hadoop:9000</value>
+  </property>
+</configuration>

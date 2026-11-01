@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <!-- 副本数：真实集群通常是 3，单机只有一个 DataNode，所以是 1 -->
+  <property>
+    <name>dfs.replication</name>
+    <value>1</value>
+  </property>
+  <!-- NameNode 的元数据存放位置 -->
+  <property>
+    <name>dfs.namenode.name.dir</name>
+    <value>file:///data/hdfs/name</value>
+  </property>
+  <!-- DataNode 的数据块存放位置 -->
+  <property>
+    <name>dfs.datanode.data.dir</name>
+    <value>file:///data/hdfs/data</value>
+  </property>
+  <!-- 关闭权限检查，避免本地学习时被用户权限问题卡住（生产环境不能这样做） -->
+  <property>
+    <name>dfs.permissions.enabled</name>
+    <value>false</value>
+  </property>
+</configuration>

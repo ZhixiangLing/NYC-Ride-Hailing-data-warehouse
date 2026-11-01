@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <!-- HDFS 的地址：其他程序通过 hdfs://hadoop:9000 访问这个文件系统 -->
+  <property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://hadoop:9000</value>
+  </property>
+  <!-- Hadoop 临时文件存放位置 -->
+  <property>
+    <name>hadoop.tmp.dir</name>
+    <value>/data/tmp</value>
+  </property>
+</configuration>

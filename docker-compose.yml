@@ -1,0 +1,59 @@
+# 第二步：Hadoop + Hive Metastore + PostgreSQL 三个容器
+services:
+  hadoop:
+    build: ./docker/hadoop
+    image: tlc-hadoop:1.0
+    container_name: hadoop
+    hostname: hadoop
+    ports:
+      - "9870:9870"   # HDFS NameNode 网页
+      - "9864:9864"   # HDFS DataNode 网页
+      - "8088:8088"   # YARN ResourceManager 网页
+      - "8042:8042"   # YARN NodeManager 网页
+      - "4040:4040"   # Spark 作业运行时的网页
+    volumes:
+      - hadoop_data:/data
+      - "./data:/raw:ro"
+      - "./sql:/sql"
+    mem_limit: 8g
+
+  # 元数据库：Hive Metastore 把"有哪些库、哪些表、表结构、分区在哪"存在这里
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    hostname: postgres
+    environment:
+      POSTGRES_DB: metastore_db
+      POSTGRES_USER: hive
+      POSTGRES_PASSWORD: password
+    volumes:
+      - hive_db:/var/lib/postgresql/data   # 元数据持久保存在这个卷里
+
+  # Hive Metastore：表的"目录"服务，Spark 通过 thrift://metastore:9083 来问它
+  metastore:
+    build: ./docker/metastore
+    image: tlc-metastore:1.0
+    container_name: metastore
+    hostname: metastore
+    depends_on:
+      - postgres
+      - hadoop
+    ports:
+      - "9083:9083"
+    environment:
+      SERVICE_NAME: metastore
+      DB_DRIVER: postgres
+      # 告诉 Metastore 去哪里连接 PostgreSQL
+      SERVICE_OPTS: >-
+        -Djavax.jdo.option.ConnectionDriverName=org.postgresql.Driver
+        -Djavax.jdo.option.ConnectionURL=jdbc:postgresql://postgres:5432/metastore_db
+        -Djavax.jdo.option.ConnectionUserName=hive
+        -Djavax.jdo.option.ConnectionPassword=password
+      # 让 Metastore 读取我们自己的配置（HDFS 地址、表数据的默认目录）
+      HIVE_CUSTOM_CONF_DIR: /hive_custom_conf
+    volumes:
+      - "./docker/metastore/conf:/hive_custom_conf:ro"
+
+volumes:
+  hadoop_data:
+  hive_db:

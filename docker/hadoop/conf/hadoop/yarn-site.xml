@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <!-- ResourceManager 运行在哪台机器上 -->
+  <property>
+    <name>yarn.resourcemanager.hostname</name>
+    <value>hadoop</value>
+  </property>
+  <!-- 这台机器一共拿出多少内存和 CPU 核给 YARN 分配 -->
+  <property>
+    <name>yarn.nodemanager.resource.memory-mb</name>
+    <value>6144</value>
+  </property>
+  <property>
+    <name>yarn.nodemanager.resource.cpu-vcores</name>
+    <value>4</value>
+  </property>
+  <!-- 单个容器最少、最多能申请多少内存 -->
+  <property>
+    <name>yarn.scheduler.minimum-allocation-mb</name>
+    <value>512</value>
+  </property>
+  <property>
+    <name>yarn.scheduler.maximum-allocation-mb</name>
+    <value>4096</value>
+  </property>
+  <!-- 关闭虚拟内存检查：Java 程序的虚拟内存往往远大于实际使用，开着容易被误杀 -->
+  <property>
+    <name>yarn.nodemanager.vmem-check-enabled</name>
+    <value>false</value>
+  </property>
+  <!-- 磁盘使用率超过 90% 时，YARN 默认会认为这台机器不健康、拒绝运行任务。Docker 的磁盘经常偏满，这里放宽 -->
+  <property>
+    <name>yarn.nodemanager.disk-health-checker.max-disk-utilization-per-disk-percentage</name>
+    <value>99.0</value>
+  </property>
+</configuration>
